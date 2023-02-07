@@ -3,16 +3,11 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import Frame from 'react-frame-component';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <div className='frame-container'>
-      <Frame className='frame'>
-        <App />
-      </Frame>
-    </div>
+    <App />
   </React.StrictMode>
 );
 

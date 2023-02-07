@@ -1,11 +1,14 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import './App.css';
+import Input from './Input'
 
 function App() {
 
-  const [data, setData] = useState('')
-  console.log(data, typeof data)
+  const [data, setData] = useState(null)
+  const [searchStr, setsearchStr] = useState('')
+  // console.log(data, typeof data)
+  // console.log(searchStr)
 
   useEffect(() => {
     const url = `https://api.hatchways.io/assessment/students`
@@ -20,27 +23,28 @@ function App() {
   }, [])
 
   function calculateAverage(grades) {
-    let sumOfGrades = 0
-    for (let key in grades) {
-      sumOfGrades += Number(grades[key])
-    }
-    return sumOfGrades / grades.length
+    return grades.reduce((accu, next)=> Number(accu) + Number(next)) / grades.length;
   }
 
   function renderData() {
     return (
-      Object.keys(data).map((obj) => {
-        let studentAvg = calculateAverage(data[obj].grades)
+      data
+      .filter((item) => {
+        let concat = `${item.firstName.toLowerCase()}` + `${item.lastName.toLowerCase()}`
+        return concat.includes(searchStr.toLowerCase())
+      })
+      .map((i) => {
+        let studentAvg = calculateAverage(i.grades)
         return (
           <div className='student-data-container'>
             <div> 
-              <img src={data[obj].pic} width="150px" height="150px" alt=""></img>
+              <img src={i.pic} width="150px" height="150px" alt=""></img>
             </div>
             <div>
-              <h1>{data[obj].firstName.toUpperCase()} {data[obj].lastName.toUpperCase()}</h1>
-              <p>Email: {data[obj].email}</p>
-              <p>Company: {data[obj].company}</p>
-              <p>Skill: {data[obj].skill}</p>
+              <h1>{i.firstName.toUpperCase()} {i.lastName.toUpperCase()}</h1>
+              <p>Email: {i.email}</p>
+              <p>Company: {i.company}</p>
+              <p>Skill: {i.skill}</p>
               <p>Average: {studentAvg}%</p>
             </div>
           </div>
@@ -51,7 +55,8 @@ function App() {
 
   return (
     <div>
-      {data? renderData(): null}
+      <Input searchStr={searchStr} setsearchStr={setsearchStr}/>
+      {data? renderData(): "Loading..."}
     </div>
   );
 }
