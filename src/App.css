@@ -1,9 +1,30 @@
+section{
+  margin: 50px;
+  height: 630px;
+  overflow: auto;
+  background-color: white;
+  border-radius: 10px;
+}
+
 .student-data-container {
   border: 0.5px solid #ededed;
+  padding-top: 20px;
   display: flex;
 }
 
-.student-data-container img {
-  border: 0.5px solid gray;
+.student-img {
+  border: 1px solid #e4e4e4;
   border-radius: 50%;
+}
+
+.toggle-btn-container {
+  background-color: white;
+  border: 0px;
+  margin-left: 10px;
+}
+
+.toggle-btn {
+  border-radius: 0%;
+  height: 30px;
+  width: 30px;
 }

@@ -4,31 +4,21 @@ import './App.css';
 import Input from './Input'
 import TestScores from './TestScores';
 
-function App() {
+
+// Allowed to open max 3 tabs at a time
+function App3() {
 
   const [data, setData] = useState(null)
   const [searchStr, setsearchStr] = useState('')
-  const [toggleData, setToggleData] = useState([])
-  const [clickedCardId, setClickedCardId] = useState("")
+  const [clickedCardId, setClickedCardId] = useState([])
 
   const onButton = "https://cdn-icons-png.flaticon.com/512/786/786385.png"
   const offButton = "https://cdn-icons-png.flaticon.com/512/121/121124.png"
 
-  console.log(data, typeof data)
+  // console.log(data, typeof data)
   // console.log(searchStr)
   // console.log(toggleData)
-  // console.log(clickedCardId)
-
-  function addToggleToData() {
-    console.log('addtoggletodata called')
-    let newData = [...data];
-    newData.map((item) => {
-      item["toggle"] = false;
-      return item;
-    })
-    console.log(newData, 'newdata')
-    setData(newData)
-  }
+  console.log('ClickedCardsArray: ', clickedCardId)
 
   useEffect(() => {
     const url = `https://api.hatchways.io/assessment/students`
@@ -36,38 +26,34 @@ function App() {
       .get(url)
       .then((response) => {
         setData(response.data.students);
-        addToggleToData();
       })
       .catch((error) => {
         console.log("Error in api call: ", error);
       })
   }, [])
 
-  useEffect(() => {
-    if (data) setToggleData(Array(data.length).fill(false));
-  }, [data])
-
   function calculateAverage(grades) {
     return grades.reduce((accu, next)=> Number(accu) + Number(next)) / grades.length;
   }
 
-  function handleToggle(idx) {
-    // setToggleData(Array(data.length).fill(false));
-    let newToggleData = [...toggleData]
-    newToggleData[idx] = !newToggleData[idx]
-    setToggleData(newToggleData)
-  }
-
-  function toggleButton(item, idx) {
-    // return toggleData[idx] ? onButton: offButton;
-    if (clickedCardId === item.id) return onButton;
+  function toggleButton(item) {
+    if (clickedCardId.includes(item.id)) return onButton;
     return offButton;
   }
 
   function handleToggleButtonClick(id) {
     // console.log(id)
-    if (clickedCardId === id) setClickedCardId("")
-    else setClickedCardId(id)
+    let maxOpenCardsAllowed = 3;
+    let newClickedCards = [...clickedCardId];
+    if (newClickedCards.includes(id)) {
+      newClickedCards = newClickedCards.filter(i=> i!=id);
+      setClickedCardId(newClickedCards)
+    }
+    else {
+      if (clickedCardId.length < maxOpenCardsAllowed) newClickedCards.push(id);
+      else newClickedCards = [id];
+      setClickedCardId(newClickedCards);
+    }
   }
 
   function renderData() {
@@ -90,12 +76,10 @@ function App() {
               <p>Company: {i.company}</p>
               <p>Skill: {i.skill}</p>
               <p>Average: {studentAvg}%</p>
-              {clickedCardId === i.id? <TestScores item={i}/> : null}
-              {/* {toggleData[idx]? <TestScores item={i}/>: null} */}
+              {clickedCardId.includes(i.id)? <TestScores item={i}/> : null}
             </div>
             <div>
-              {/* <button className='toggle-btn-container' onClick={() => handleToggle(idx)}><img className='toggle-btn' src={toggleButton(i, idx)}></img></button> */}
-              <button onClick={() => handleToggleButtonClick(i.id)} className='toggle-btn-container'><img className='toggle-btn' src={toggleButton(i, idx)}></img></button>
+              <button onClick={() => handleToggleButtonClick(i.id)} className='toggle-btn-container'><img className='toggle-btn' src={toggleButton(i)}></img></button>
             </div>
           </div>
         )
@@ -113,4 +97,4 @@ function App() {
   );
 }
 
-export default App;
+export default App3;
