@@ -10,7 +10,6 @@ function App4() {
 
   const [data, setData] = useState(null)
   const [searchStr, setsearchStr] = useState('')
-  const [clickedCardId, setClickedCardId] = useState([])
 
   const onButton = "https://cdn-icons-png.flaticon.com/512/786/786385.png"
   const offButton = "https://cdn-icons-png.flaticon.com/512/121/121124.png"

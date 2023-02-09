@@ -43,12 +43,13 @@ function App2() {
   function handleToggleButtonClick(id) {
     // console.log(id)
     let newClickedCards = [...clickedCardId];
-    if (clickedCardId.includes(id)) setClickedCardId(newClickedCards.filter(i => i!=id))
+    if (clickedCardId.includes(id)) {  
+      setClickedCardId(newClickedCards.filter(i => i!==id))
+    }
     else {
       newClickedCards.push(id)
       setClickedCardId(newClickedCards)
     }
-
   }
 
   function renderData() {

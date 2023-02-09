@@ -46,7 +46,7 @@ function App3() {
     let maxOpenCardsAllowed = 3;
     let newClickedCards = [...clickedCardId];
     if (newClickedCards.includes(id)) {
-      newClickedCards = newClickedCards.filter(i=> i!=id);
+      newClickedCards = newClickedCards.filter(i=> i!==id);
       setClickedCardId(newClickedCards)
     }
     else {
